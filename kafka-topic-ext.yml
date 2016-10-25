@@ -1,0 +1,7 @@
+apiVersion: extensions/v1beta1
+kind: ThirdPartyResource
+description: "Kafka Topics Resources"
+metadata:
+  name: "kafka-topic.shopify.io"
+versions:
+  - name: v1

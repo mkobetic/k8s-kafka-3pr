@@ -1,0 +1,17 @@
+apiVersion: shopify.io/v1
+kind: KafkaTopic
+description: "Test topic 1"
+metadata:
+  name: "test1"
+---
+apiVersion: shopify.io/v1
+kind: KafkaTopic
+description: "Test topic 2"
+metadata:
+  name: "test2"
+---
+apiVersion: shopify.io/v1
+kind: KafkaTopic
+description: "Test topic 3"
+metadata:
+  name: "test3"
