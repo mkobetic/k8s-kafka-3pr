@@ -43,12 +43,11 @@ func main() {
 
 	r := client.Get().Namespace("default").Resource(resource)
 	fmt.Println(r.URL())
-
-	topics := &types.KafkaTopicList{TypeMeta: unversioned.TypeMeta{APIVersion: "shopify.io/v1", Kind: "KafkaTopicList"}}
-	fmt.Println(topics.GetObjectKind())
-	if err := r.Do().Into(topics); err != nil {
+	res := r.Do()
+	topics, err := res.Get()
+	if err != nil {
 		panic(err.Error())
 	}
-	spew.Dump(topics)
+	spew.Dump(topics.(*types.KafkaTopicList))
 	fmt.Printf("%#v\n", topics)
 }

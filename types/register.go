@@ -5,17 +5,16 @@ import (
 	"k8s.io/client-go/pkg/api/unversioned"
 	"k8s.io/client-go/pkg/apimachinery/announced"
 	"k8s.io/client-go/pkg/runtime"
-	"k8s.io/client-go/pkg/util/sets"
 )
 
 func init() {
 	if err := announced.NewGroupMetaFactory(
 		&announced.GroupMetaFactoryArgs{
-			GroupName:                  GroupName,
-			VersionPreferenceOrder:     []string{GroupVersion.Version},
-			RootScopedKinds:            sets.NewString("KafkaTopic"),
-			ImportPrefix:               "github.com/mkobetic/k8s-kafka-3pr/types",
-			AddInternalObjectsToScheme: AddToScheme,
+			GroupName:              GroupName,
+			VersionPreferenceOrder: []string{GroupVersion.Version},
+			ImportPrefix:           "github.com/mkobetic/k8s-kafka-3pr",
+			// RootScopedKinds:        sets.NewString("KafkaTopic", "KafkaTopicList"),
+			// AddInternalObjectsToScheme: AddToScheme,
 		},
 		announced.VersionToSchemeFunc{
 			GroupVersion.Version: AddToScheme,
