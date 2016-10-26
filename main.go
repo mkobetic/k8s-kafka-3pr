@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"net/http"
 	"os"
 
 	"github.com/davecgh/go-spew/spew"
@@ -28,6 +29,9 @@ func main() {
 	if err != nil {
 		panic(err.Error())
 	}
+	config.WrapTransport = func(rt http.RoundTripper) http.RoundTripper {
+		return &loggingRoundTripper{rt}
+	}
 	config.APIPath = "/apis"
 	config.GroupVersion = &unversioned.GroupVersion{Group: "shopify.io", Version: "v1"}
 	config.NegotiatedSerializer = serializer.DirectCodecFactory{CodecFactory: api.Codecs}
@@ -39,9 +43,12 @@ func main() {
 
 	r := client.Get().Namespace("default").Resource(resource)
 	fmt.Println(r.URL())
-	topics, err := r.Do().Get()
-	if err != nil {
+
+	topics := &types.KafkaTopicList{TypeMeta: unversioned.TypeMeta{APIVersion: "shopify.io/v1", Kind: "KafkaTopicList"}}
+	fmt.Println(topics.GetObjectKind())
+	if err := r.Do().Into(topics); err != nil {
 		panic(err.Error())
 	}
-	spew.Dump(topics.(*types.KafkaTopicList))
+	spew.Dump(topics)
+	fmt.Printf("%#v\n", topics)
 }

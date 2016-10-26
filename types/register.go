@@ -5,6 +5,7 @@ import (
 	"k8s.io/client-go/pkg/api/unversioned"
 	"k8s.io/client-go/pkg/apimachinery/announced"
 	"k8s.io/client-go/pkg/runtime"
+	"k8s.io/client-go/pkg/util/sets"
 )
 
 func init() {
@@ -12,6 +13,7 @@ func init() {
 		&announced.GroupMetaFactoryArgs{
 			GroupName:                  GroupName,
 			VersionPreferenceOrder:     []string{GroupVersion.Version},
+			RootScopedKinds:            sets.NewString("KafkaTopic"),
 			ImportPrefix:               "github.com/mkobetic/k8s-kafka-3pr/types",
 			AddInternalObjectsToScheme: AddToScheme,
 		},
@@ -56,11 +58,8 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 
 type KafkaTopicList struct {
 	unversioned.TypeMeta `json:",inline"`
-
-	// Standard list metadata.
 	unversioned.ListMeta `json:"metadata,omitempty"`
-
-	Items []KafkaTopic `json:"items"`
+	Items                []KafkaTopic `json:"items"`
 }
 
 type KafkaTopic struct {
