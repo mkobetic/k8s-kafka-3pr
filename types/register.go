@@ -5,7 +5,6 @@ import (
 	"k8s.io/client-go/pkg/api/unversioned"
 	"k8s.io/client-go/pkg/apimachinery/announced"
 	"k8s.io/client-go/pkg/runtime"
-	"k8s.io/client-go/pkg/util/sets"
 )
 
 func init() {
@@ -14,7 +13,6 @@ func init() {
 			GroupName:                  GroupName,
 			VersionPreferenceOrder:     []string{GroupVersion.Version},
 			ImportPrefix:               "github.com/mkobetic/k8s-kafka-3pr/types",
-			RootScopedKinds:            sets.NewString("ThirdPartyResource"),
 			AddInternalObjectsToScheme: AddToScheme,
 		},
 		announced.VersionToSchemeFunc{

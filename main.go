@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/davecgh/go-spew/spew"
 	"github.com/mkobetic/k8s-kafka-3pr/types"
 
 	"k8s.io/client-go/pkg/api"
@@ -36,11 +37,11 @@ func main() {
 	}
 	// topics, err := clientset.Extensions().ThirdPartyResources().Get("kafka-topic.shopify.io")
 
-	r := client.Get().Resource(resource)
+	r := client.Get().Namespace("default").Resource(resource)
 	fmt.Println(r.URL())
 	topics, err := r.Do().Get()
 	if err != nil {
 		panic(err.Error())
 	}
-	fmt.Println(topics.(*types.KafkaTopicList))
+	spew.Dump(topics.(*types.KafkaTopicList))
 }
