@@ -34,20 +34,32 @@ func main() {
 	}
 	config.APIPath = "/apis"
 	config.GroupVersion = &unversioned.GroupVersion{Group: "shopify.io", Version: "v1"}
+
+	// Clientset => can't access custom api groups (have to generate client first)
+	// topics, err := clientset.Extensions().ThirdPartyResources().Get("kafka-topic.shopify.io")
+
+	// Dynamic Client => generic UnstructeredList/Unstructured result
+	// client, err := dynamic.NewClient(config)
+	// if err != nil {
+	// 	panic(err)
+	// }
+	// r := &unversioned.APIResource{Name: resource, Namespaced: false}
+	// topics, err := client.Resource(r, "").List(nil)
+
+	// Bare RESTClient => needs JSON marshaling code generated for custom types?
 	config.NegotiatedSerializer = serializer.DirectCodecFactory{CodecFactory: api.Codecs}
 	client, err := rest.RESTClientFor(config)
 	if err != nil {
 		panic(err)
 	}
-	// topics, err := clientset.Extensions().ThirdPartyResources().Get("kafka-topic.shopify.io")
-
 	r := client.Get().Namespace("default").Resource(resource)
 	fmt.Println(r.URL())
 	res := r.Do()
-	topics, err := res.Get()
+	obj, err := res.Get()
 	if err != nil {
 		panic(err.Error())
 	}
-	spew.Dump(topics.(*types.KafkaTopicList))
+	topics := obj.(*types.KafkaTopicList)
+	spew.Dump(topics)
 	fmt.Printf("%#v\n", topics)
 }
