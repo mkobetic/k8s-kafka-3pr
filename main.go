@@ -36,7 +36,11 @@ func main() {
 	config.GroupVersion = &unversioned.GroupVersion{Group: "shopify.io", Version: "v1"}
 
 	// Clientset => can't access custom api groups (have to generate client first)
-	// topics, err := clientset.Extensions().ThirdPartyResources().Get("kafka-topic.shopify.io")
+	// clientset, err := kubernetes.NewForConfig(config)
+	// if err != nil {
+	// 	panic(err)
+	// }
+	// topics, err := clientset.Extensions().ThirdPartyResources().Get(resource)
 
 	// Dynamic Client => generic UnstructeredList/Unstructured result
 	// client, err := dynamic.NewClient(config)
